@@ -1,0 +1,86 @@
+
+
+/* 1. LeetCode 14 – Longest Common Prefix */
+class Solution1 {
+    public String longestCommonPrefix(String[] strs) {
+        if (strs.length == 0) return "";
+        String prefix = strs[0];
+        for (int i = 1; i < strs.length; i++) {
+            while (!strs[i].startsWith(prefix)) {
+                prefix = prefix.substring(0, prefix.length() - 1);
+                if (prefix.isEmpty()) return "";
+            }
+        }
+        return prefix;
+    }
+}
+
+/* 2. LeetCode 20 – Valid Parentheses */
+class Solution2 {
+    public boolean isValid(String s) {
+        java.util.Stack<Character> st = new java.util.Stack<>();
+        for (char c : s.toCharArray()) {
+            if (c == '(' || c == '{' || c == '[') {
+                st.push(c);
+            } else {
+                if (st.isEmpty()) return false;
+                char top = st.pop();
+                if (c == ')' && top != '(' ||
+                    c == '}' && top != '{' ||
+                    c == ']' && top != '[')
+                    return false;
+            }
+        }
+        return st.isEmpty();
+    }
+}
+
+/* 3. LeetCode 28 – Find the Index of the First Occurrence in a String */
+class Solution3 {
+    public int strStr(String haystack, String needle) {
+        return haystack.indexOf(needle);
+    }
+}
+
+/* 4. LeetCode 58 – Length of Last Word */
+class Solution4 {
+    public int lengthOfLastWord(String s) {
+        String[] arr = s.trim().split(" ");
+        return arr[arr.length - 1].length();
+    }
+}
+
+/* 5. LeetCode 67 – Add Binary */
+class Solution5 {
+    public String addBinary(String a, String b) {
+        StringBuilder sb = new StringBuilder();
+        int i = a.length() - 1, j = b.length() - 1, carry = 0;
+        while (i >= 0 || j >= 0 || carry == 1) {
+            if (i >= 0) carry += a.charAt(i--) - '0';
+            if (j >= 0) carry += b.charAt(j--) - '0';
+            sb.append(carry % 2);
+            carry /= 2;
+        }
+        return sb.reverse().toString();
+    }
+}
+
+/* 6. LeetCode 125 – Valid Palindrome */
+class Solution6 {
+    public boolean isPalindrome(String s) {
+        s = s.toLowerCase().replaceAll("[^a-z0-9]", "");
+        int l = 0, r = s.length() - 1;
+        while (l < r) {
+            if (s.charAt(l++) != s.charAt(r--))
+                return false;
+        }
+        return true;
+    }
+}
+
+/* 7. LeetCode 344 – Reverse String */
+class Solution7 {
+    public void reverseString(char[] s) {
+        int l = 0, r = s.length - 1;
+        while (l < r) {
+            char
