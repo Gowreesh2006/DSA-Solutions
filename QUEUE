@@ -1,0 +1,156 @@
+
+/* 1. LeetCode 232 – Implement Queue using Stacks */
+class MyQueue1 {
+    java.util.Stack<Integer> s1 = new java.util.Stack<>();
+    java.util.Stack<Integer> s2 = new java.util.Stack<>();
+
+    public void push(int x) {
+        s1.push(x);
+    }
+
+    public int pop() {
+        while (s2.isEmpty())
+            s2.push(s1.pop());
+        return s2.pop();
+    }
+
+    public int peek() {
+        while (s2.isEmpty())
+            s2.push(s1.pop());
+        return s2.peek();
+    }
+
+    public boolean empty() {
+        return s1.isEmpty() && s2.isEmpty();
+    }
+}
+
+/* 2. LeetCode 225 – Implement Stack using Queues */
+class MyStack2 {
+    java.util.Queue<Integer> q = new java.util.LinkedList<>();
+
+    public void push(int x) {
+        q.add(x);
+        for (int i = 1; i < q.size(); i++)
+            q.add(q.remove());
+    }
+
+    public int pop() {
+        return q.remove();
+    }
+
+    public int top() {
+        return q.peek();
+    }
+
+    public boolean empty() {
+        return q.isEmpty();
+    }
+}
+
+/* 3. LeetCode 933 – Number of Recent Calls */
+class RecentCounter {
+    java.util.Queue<Integer> q = new java.util.LinkedList<>();
+
+    public int ping(int t) {
+        q.add(t);
+        while (q.peek() < t - 3000)
+            q.remove();
+        return q.size();
+    }
+}
+
+/* 4. LeetCode 1700 – Number of Students Unable to Eat Lunch */
+class Solution4 {
+    public int countStudents(int[] students, int[] sandwiches) {
+        java.util.Queue<Integer> q = new java.util.LinkedList<>();
+        for (int s : students) q.add(s);
+        int i = 0, count = 0;
+        while (!q.isEmpty() && count < q.size()) {
+            if (q.peek() == sandwiches[i]) {
+                q.remove();
+                i++;
+                count = 0;
+            } else {
+                q.add(q.remove());
+                count++;
+            }
+        }
+        return q.size();
+    }
+}
+
+/* 5. LeetCode 1823 – Find the Winner of the Circular Game */
+class Solution5 {
+    public int findTheWinner(int n, int k) {
+        java.util.Queue<Integer> q = new java.util.LinkedList<>();
+        for (int i = 1; i <= n; i++) q.add(i);
+        while (q.size() > 1) {
+            for (int i = 1; i < k; i++)
+                q.add(q.remove());
+            q.remove();
+        }
+        return q.peek();
+    }
+}
+
+/* 6. LeetCode 950 – Reveal Cards In Increasing Order */
+class Solution6 {
+    public int[] deckRevealedIncreasing(int[] deck) {
+        java.util.Arrays.sort(deck);
+        java.util.Queue<Integer> q = new java.util.LinkedList<>();
+        for (int i = deck.length - 1; i >= 0; i--) {
+            if (!q.isEmpty())
+                q.add(q.remove());
+            q.add(deck[i]);
+        }
+        int[] res = new int[deck.length];
+        for (int i = deck.length - 1; i >= 0; i--)
+            res[i] = q.remove();
+        return res;
+    }
+}
+
+/* 7. LeetCode 622 – Design Circular Queue */
+class MyCircularQueue {
+    int[] arr;
+    int front, rear, size;
+
+    public MyCircularQueue(int k) {
+        arr = new int[k];
+        front = 0;
+        rear = -1;
+        size = 0;
+    }
+
+    public boolean enQueue(int value) {
+        if (isFull()) return false;
+        rear = (rear + 1) % arr.length;
+        arr[rear] = value;
+        size++;
+        return true;
+    }
+
+    public boolean deQueue() {
+        if (isEmpty()) return false;
+        front = (front + 1) % arr.length;
+        size--;
+        return true;
+    }
+
+    public int Front() {
+        return isEmpty() ? -1 : arr[front];
+    }
+
+    public int Rear() {
+        return isEmpty() ? -1 : arr[rear];
+    }
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public boolean isFull() {
+        return size == arr.length;
+    }
+}
