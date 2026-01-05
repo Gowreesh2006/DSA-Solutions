@@ -1,0 +1,153 @@
+
+/* 1. LeetCode 20 – Valid Parentheses */
+class Solution1 {
+    public boolean isValid(String s) {
+        java.util.Stack<Character> st = new java.util.Stack<>();
+        for (char c : s.toCharArray()) {
+            if (c == '(' || c == '{' || c == '[') {
+                st.push(c);
+            } else {
+                if (st.isEmpty()) return false;
+                char t = st.pop();
+                if (c == ')' && t != '(' ||
+                    c == '}' && t != '{' ||
+                    c == ']' && t != '[')
+                    return false;
+            }
+        }
+        return st.isEmpty();
+    }
+}
+
+/* 2. LeetCode 155 – Min Stack */
+class MinStack {
+    java.util.Stack<Integer> s = new java.util.Stack<>();
+    java.util.Stack<Integer> m = new java.util.Stack<>();
+
+    public void push(int x) {
+        s.push(x);
+        if (m.isEmpty() || x <= m.peek())
+            m.push(x);
+    }
+
+    public void pop() {
+        if (s.pop().equals(m.peek()))
+            m.pop();
+    }
+
+    public int top() {
+        return s.peek();
+    }
+
+    public int getMin() {
+        return m.peek();
+    }
+}
+
+/* 3. LeetCode 232 – Implement Queue using Stacks */
+class MyQueue {
+    java.util.Stack<Integer> s1 = new java.util.Stack<>();
+    java.util.Stack<Integer> s2 = new java.util.Stack<>();
+
+    public void push(int x) {
+        s1.push(x);
+    }
+
+    public int pop() {
+        while (s2.isEmpty())
+            s2.push(s1.pop());
+        return s2.pop();
+    }
+
+    public int peek() {
+        while (s2.isEmpty())
+            s2.push(s1.pop());
+        return s2.peek();
+    }
+
+    public boolean empty() {
+        return s1.isEmpty() && s2.isEmpty();
+    }
+}
+
+/* 4. LeetCode 225 – Implement Stack using Queues */
+class MyStack {
+    java.util.Queue<Integer> q = new java.util.LinkedList<>();
+
+    public void push(int x) {
+        q.add(x);
+        for (int i = 1; i < q.size(); i++)
+            q.add(q.remove());
+    }
+
+    public int pop() {
+        return q.remove();
+    }
+
+    public int top() {
+        return q.peek();
+    }
+
+    public boolean empty() {
+        return q.isEmpty();
+    }
+}
+
+/* 5. LeetCode 496 – Next Greater Element I */
+class Solution5 {
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        java.util.Stack<Integer> st = new java.util.Stack<>();
+        java.util.Map<Integer, Integer> map = new java.util.HashMap<>();
+        for (int n : nums2) {
+            while (!st.isEmpty() && st.peek() < n)
+                map.put(st.pop(), n);
+            st.push(n);
+        }
+        int[] res = new int[nums1.length];
+        for (int i = 0; i < nums1.length; i++)
+            res[i] = map.getOrDefault(nums1[i], -1);
+        return res;
+    }
+}
+
+/* 6. LeetCode 682 – Baseball Game */
+class Solution6 {
+    public int calPoints(String[] ops) {
+        java.util.Stack<Integer> st = new java.util.Stack<>();
+        for (String s : ops) {
+            if (s.equals("+")) {
+                int a = st.pop();
+                int b = st.peek();
+                st.push(a);
+                st.push(a + b);
+            } else if (s.equals("D")) {
+                st.push(st.peek() * 2);
+            } else if (s.equals("C")) {
+                st.pop();
+            } else {
+                st.push(Integer.parseInt(s));
+            }
+        }
+        int sum = 0;
+        for (int n : st) sum += n;
+        return sum;
+    }
+}
+
+/* 7. LeetCode 844 – Backspace String Compare */
+class Solution7 {
+    public boolean backspaceCompare(String s, String t) {
+        return build(s).equals(build(t));
+    }
+
+    private String build(String s) {
+        java.util.Stack<Character> st = new java.util.Stack<>();
+        for (char c : s.toCharArray()) {
+            if (c != '#') st.push(c);
+            else if (!st.isEmpty()) st.pop();
+        }
+        StringBuilder sb = new StringBuilder();
+        for (char c : st) sb.append(c);
+        return sb.toString();
+    }
+}
